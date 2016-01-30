@@ -1,0 +1,20 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<dom-module id="recipients-module">
+    <template>
+    <template is='dom-repeat' items="[[recipItems]]" as="item" filter="isSender">
+        <span>{{item.a}} </span>
+    </template>
+    </template>
+    <script>
+        Polymer({
+            is:"recipients-module",
+            properties: {
+                recipItems:Array
+            },
+            isSender:function(address) {
+                return address.t=="f";
+            }
+        });
+    </script>
+    </dom-module>
