@@ -1,0 +1,97 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="search-module">
+  <template>
+	<iron-ajax url='{{requestURL}}' last-response="{{suggestionsData}}" auto id="suggestionsRequest"></iron-ajax>
+	<!--<iron-ajax url='http://192.168.2.14:7070/service/extension/searchpredict' last-response="{{suggestionsData}}" auto id="suggestionsRequest"></iron-ajax>-->
+    <style include="shared-styles">
+      :host {
+        display: block;
+		width: 100%;
+		height: 60px;
+      }
+
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+	  paper-listbox {
+	  	position: absolute;
+		z-index: 100;
+	  }
+    </style>
+
+    <paper-input label="Search" value='{{searchQuery::input}}' id="queryInput" on-keydown="checkForEnter"></paper-input>
+	<paper-listbox selected="{{selected}}">
+		<template is="dom-repeat" items="{{suggestionsData}}">
+		  <paper-item>{{item}}</paper-item>
+		</template>
+	</paper-listbox>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'search-module',
+        properties: {
+          searchQuery: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          suggestionQuery: {
+            type: String,
+            value: '',
+            notify: true
+          },
+		  requestBaseURL: {
+		  	type: String,
+			value: '/service/extension/searchpredict',
+			notify: false
+		  },
+		  requestURL: {
+		  	type: String,
+			computed: 'computeRequestURL(requestBaseURL, suggestionQuery)',
+			notify: true
+		  },
+		  selected: {
+		  	type: Number,
+			observer: 'selectedChanged'
+		  },
+		  hideSuggestions: {
+		  	type: Boolean,
+			value: true
+		  }
+
+        },
+		selectedChanged: function(newValue) {
+			this.searchQuery = this.suggestionsData[newValue];
+			this.suggestionsData = [];
+			document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="' + this.searchQuery + '"';
+		},
+		computeRequestURL: function(requestBaseURL, suggestionQuery) {
+			return requestBaseURL + '?query="' + suggestionQuery + '"';
+		},
+		checkForEnter: function(e) {
+			if (e.keyCode === 13) {
+				//enter pressed
+				this.suggestionsData = [];
+				document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="'+document.querySelector("#queryInput").value+'"';
+			} else {
+				this.suggestionQuery = this.searchQuery;
+			}
+		},
+		ready: function() {
+			console.log(this.searchQuery);
+		},
+		suggest: function() {
+			console.log(this.searchQuery);
+		}
+      });
+    })();
+  </script>
+</dom-module>
+
