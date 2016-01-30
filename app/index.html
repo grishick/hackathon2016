@@ -18,20 +18,49 @@
 	<link rel="import" href="elements/search-module/search-module.html">
 </head>
 <body unresolved fullbleed>
-<template is="dom-bind">
+<template is="dom-bind" id="app">
+
+	<style include="shared-styles">
+	</style>
 
 	<template is="dom-bind">
 		<search-module></search-module>
 	</template>
-    <iron-ajax url='/home/user1/inbox?fmt=json&query="Roland Schemers"' last-response="{{data}}" auto id="server"></iron-ajax>
+    <iron-ajax url='/home/user1/inbox?fmt=json' last-response="{{data}}" auto id="server"></iron-ajax>
     <paper-listbox>
     <template is='dom-repeat' items="[[data.m]]" as="item">
+		<style include="shared-styles">
+			paper-item.message {
+				border-bottom: 1px solid #bbbbbb;
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+			.recepients {
+				color: #333;
+				font-size: 14px;
+				font-weight: bold;
+			}
+			.subject {
+				color: #555;
+				font-size: 16px;
+			}
+			.snippet {
+				color: #777;
+				font-size: 14px;
+			}
+		</style>
+
         <!-- Create an individual task -->
-        <paper-item>
+        <paper-item class="message">
             <paper-item-body two-line>
-            <div>[[item.su]]</div>
-                <div secondary>[[item.fr]]</div>
-                </paper-item-body>
+				<div class="recepients">
+					<template is='dom-repeat' items="[[item.e]]" as="item" id="recepients-module" observe="t">
+						<span>{{item.a}} </span>
+					</template>
+				</div>
+				<div class="subject">[[item.su]]</div>
+				<div class="snippet" secondary>[[item.fr]]</div>
+			</paper-item-body>
         </paper-item>
     </template>
     </paper-listbox>
