@@ -3,8 +3,8 @@
 
 <dom-module id="search-module">
   <template>
-	<iron-ajax url='{{requestBaseURL}}' last-response="{{suggestionsData}}" auto id="server"></iron-ajax>
-	<!--<iron-ajax url='http://192.168.2.14:7070/service/extension/searchpredict' last-response="{{suggestionsData}}" auto id="server"></iron-ajax>-->
+	<iron-ajax url='{{requestURL}}' last-response="{{suggestionsData}}" auto id="suggestionsRequest"></iron-ajax>
+	<!--<iron-ajax url='http://192.168.2.14:7070/service/extension/searchpredict' last-response="{{suggestionsData}}" auto id="suggestionsRequest"></iron-ajax>-->
     <style include="shared-styles">
       :host {
         display: block;
@@ -22,8 +22,8 @@
 	  }
     </style>
 
-    <paper-input label="Search query" bind-value='{{searchQuery}}' id="queryInput"></paper-input>
-	<paper-listbox>
+    <paper-input label="Search" value='{{searchQuery::input}}' id="queryInput" on-keydown="checkForEnter"></paper-input>
+	<paper-listbox selected="{{selected}}">
 		<template is="dom-repeat" items="{{suggestionsData}}">
 		  <paper-item>{{item}}</paper-item>
 		</template>
@@ -37,12 +37,12 @@
       Polymer({
         is: 'search-module',
         properties: {
-		  suggestions: {
-		  	type: Array,
-			value: [],
-			notify: true
-		  },
           searchQuery: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          suggestionQuery: {
             type: String,
             value: '',
             notify: true
@@ -54,8 +54,12 @@
 		  },
 		  requestURL: {
 		  	type: String,
-			computed: 'computeRequestURL(requestBaseURL, searchQuery)',
+			computed: 'computeRequestURL(requestBaseURL, suggestionQuery)',
 			notify: true
+		  },
+		  selected: {
+		  	type: Number,
+			observer: 'selectedChanged'
 		  },
 		  hideSuggestions: {
 		  	type: Boolean,
@@ -63,8 +67,22 @@
 		  }
 
         },
-		computeRequestURL: function(requestBaseURL, searchQuery) {
-			return requestBaseURL + '?query="' + searchQuery + '"';
+		selectedChanged: function(newValue) {
+			this.searchQuery = this.suggestionsData[newValue];
+			this.suggestionsData = [];
+			document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="' + this.searchQuery + '"';
+		},
+		computeRequestURL: function(requestBaseURL, suggestionQuery) {
+			return requestBaseURL + '?query="' + suggestionQuery + '"';
+		},
+		checkForEnter: function(e) {
+			if (e.keyCode === 13) {
+				//enter pressed
+				this.suggestionsData = [];
+				document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="'+document.querySelector("#queryInput").value+'"';
+			} else {
+				this.suggestionQuery = this.searchQuery;
+			}
 		},
 		ready: function() {
 			console.log(this.searchQuery);

@@ -23,7 +23,6 @@
 	<template is="dom-bind">
 		<search-module></search-module>
 	</template>
-    <paper-button raised id="mybutton">Toggle query</paper-button>
     <iron-ajax url='/home/user1/inbox?fmt=json&query="Roland Schemers"' last-response="{{data}}" auto id="server"></iron-ajax>
     <paper-listbox>
     <template is='dom-repeat' items="[[data.m]]" as="item">
@@ -36,13 +35,6 @@
         </paper-item>
     </template>
     </paper-listbox>
-    <script>
-        document.querySelector('#mybutton').addEventListener('click',function(e) {
-            //alert(document.querySelector("#queryInput").value);
-            document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="'+document.querySelector("#queryInput").value+'"';
-        });
-
-    </script>
 </template>
 
 
