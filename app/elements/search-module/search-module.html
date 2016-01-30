@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="search-module">
+  <template>
+	<iron-ajax url='{{requestBaseURL}}' last-response="{{suggestionsData}}" auto id="server"></iron-ajax>
+	<!--<iron-ajax url='http://192.168.2.14:7070/service/extension/searchpredict' last-response="{{suggestionsData}}" auto id="server"></iron-ajax>-->
+    <style include="shared-styles">
+      :host {
+        display: block;
+		width: 100%;
+		height: 60px;
+      }
+
+      span,
+      input {
+        @apply(--paper-font-body2);
+      }
+	  paper-listbox {
+	  	position: absolute;
+		z-index: 100;
+	  }
+    </style>
+
+    <paper-input label="Search query" bind-value='{{searchQuery}}' id="queryInput"></paper-input>
+	<paper-listbox>
+		<template is="dom-repeat" items="{{suggestionsData}}">
+		  <paper-item>{{item}}</paper-item>
+		</template>
+	</paper-listbox>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'search-module',
+        properties: {
+		  suggestions: {
+		  	type: Array,
+			value: [],
+			notify: true
+		  },
+          searchQuery: {
+            type: String,
+            value: '',
+            notify: true
+          },
+		  requestBaseURL: {
+		  	type: String,
+			value: '/service/extension/searchpredict',
+			notify: false
+		  },
+		  requestURL: {
+		  	type: String,
+			computed: 'computeRequestURL(requestBaseURL, searchQuery)',
+			notify: true
+		  },
+		  hideSuggestions: {
+		  	type: Boolean,
+			value: true
+		  }
+
+        },
+		computeRequestURL: function(requestBaseURL, searchQuery) {
+			return requestBaseURL + '?query="' + searchQuery + '"';
+		},
+		ready: function() {
+			console.log(this.searchQuery);
+		},
+		suggest: function() {
+			console.log(this.searchQuery);
+		}
+      });
+    })();
+  </script>
+</dom-module>
+

@@ -4,14 +4,25 @@
     <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="bower_components/iron-list/iron-list.html">
     <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <link rel="import" href="bower_components/iron-selector/iron-selector.html">
     <link rel="import" href="bower_components/paper-button/paper-button.html">
     <link rel='import' href='bower_components/paper-listbox/paper-listbox.html'/>
     <link rel='import' href='bower_components/paper-item/paper-item.html'/>
     <link rel='import' href='bower_components/paper-input/paper-input.html'/>
+	<link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
+	<link rel="import" href="bower_components/paper-styles/typography.html">
+	<link rel="import" href="bower_components/paper-item/paper-item.html">
+	<link rel="import" href="bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+	<!--custom elements-->
+	<link rel="import" href="styles/shared-styles.html">
+	<link rel="import" href="elements/search-module/search-module.html">
 </head>
 <body unresolved fullbleed>
 <template is="dom-bind">
-    <paper-input label="Search query" bind-value='{{searchquery}}' id="queryInput"></paper-input>
+
+	<template is="dom-bind">
+		<search-module></search-module>
+	</template>
     <paper-button raised id="mybutton">Toggle query</paper-button>
     <iron-ajax url='/home/user1/inbox?fmt=json&query="Roland Schemers"' last-response="{{data}}" auto id="server"></iron-ajax>
     <paper-listbox>
