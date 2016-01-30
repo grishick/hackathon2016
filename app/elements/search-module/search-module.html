@@ -22,10 +22,16 @@
 		z-index: 100;
 		width: 100%;
 	  }
+	  paper-listbox .selectedItem {
+	  	color: #330000;
+	  }
+	  paper-item.paper-item-0.iron-selected {
+	  	font-weight: normal;
+	  }
     </style>
 
-    <paper-input label="Search" value='{{searchQuery::input}}' id="queryInput" on-keydown="checkForEnter"></paper-input>
-	<paper-listbox selected="{{selected}}">
+    <paper-input label="Search" value='{{searchQuery::input}}' id="queryInput" on-keyup="checkForEnter"></paper-input>
+	<paper-listbox selected="{{selected}}" selectedClass="selectedItem">
 		<template is="dom-repeat" items="{{suggestionsData}}">
 		  <paper-item>{{item}}</paper-item>
 		</template>
