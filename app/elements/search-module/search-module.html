@@ -17,8 +17,10 @@
         @apply(--paper-font-body2);
       }
 	  paper-listbox {
+		background-color: rgba(255,255,255,0.9);
 	  	position: absolute;
 		z-index: 100;
+		width: 100%;
 	  }
     </style>
 
@@ -73,7 +75,7 @@
 			document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="' + this.searchQuery + '"';
 		},
 		computeRequestURL: function(requestBaseURL, suggestionQuery) {
-			return requestBaseURL + '?query="' + suggestionQuery + '"';
+			return requestBaseURL + '?query=' + suggestionQuery;
 		},
 		checkForEnter: function(e) {
 			if (e.keyCode === 13) {
@@ -85,6 +87,7 @@
 			}
 		},
 		ready: function() {
+			this.suggestionsData = [];
 			console.log(this.searchQuery);
 		},
 		suggest: function() {
