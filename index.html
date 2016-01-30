@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="bower_components/iron-list/iron-list.html">
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel='import' href='bower_components/paper-listbox/paper-listbox.html'/>
+    <link rel='import' href='bower_components/paper-item/paper-item.html'/>
+    <link rel='import' href='bower_components/paper-input/paper-input.html'/>
+</head>
+<body unresolved fullbleed>
+<template is="dom-bind">
+    <paper-input label="Search query" bind-value='{{searchquery}}' id="queryInput"></paper-input>
+    <paper-button raised id="mybutton">Toggle query</paper-button>
+    <iron-ajax url='/home/user1/inbox?fmt=json&query="Roland Schemers"' last-response="{{data}}" auto id="server"></iron-ajax>
+    <paper-listbox>
+    <template is='dom-repeat' items="[[data.m]]" as="item">
+        <!-- Create an individual task -->
+        <paper-item>
+            <paper-item-body two-line>
+            <div>[[item.su]]</div>
+                <div secondary>[[item.fr]]</div>
+                </paper-item-body>
+        </paper-item>
+    </template>
+    </paper-listbox>
+    <script>
+        document.querySelector('#mybutton').addEventListener('click',function(e) {
+            //alert(document.querySelector("#queryInput").value);
+            document.querySelector("#server").url = '/home/user1/inbox?fmt=json&query="'+document.querySelector("#queryInput").value+'"';
+        });
+
+    </script>
+</template>
+
+
+</body>
+</html>
