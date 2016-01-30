@@ -21,15 +21,6 @@
 <template is="dom-bind" id="app">
 
 	<style include="shared-styles">
-	</style>
-
-	<template is="dom-bind">
-		<search-module></search-module>
-	</template>
-    <iron-ajax url='/home/user1/inbox?fmt=json' last-response="{{data}}" auto id="server"></iron-ajax>
-    <paper-listbox>
-    <template is='dom-repeat' items="[[data.m]]" as="item">
-		<style include="shared-styles">
 			paper-item.message {
 				border-bottom: 1px solid #bbbbbb;
 				padding-top: 10px;
@@ -48,7 +39,17 @@
 				color: #777;
 				font-size: 14px;
 			}
-		</style>
+			paper-item:focus:before {
+				background: #ffffff;
+			}
+	</style>
+
+	<template is="dom-bind">
+		<search-module></search-module>
+	</template>
+    <iron-ajax url='/home/user1/inbox?fmt=json' last-response="{{data}}" auto id="server"></iron-ajax>
+    <paper-listbox selectable="none">
+    <template is='dom-repeat' items="[[data.m]]" as="item">
 
         <!-- Create an individual task -->
         <paper-item class="message">
